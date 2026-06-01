@@ -311,7 +311,7 @@ function reiniciarGlobal() {
 }
 
 // ==========================================
-// SISTEMA DE TRUCO DUPLAS
+// SISTEMA DE TRUCO DUPLAS (CORRIGIDO)
 // ==========================================
 function pedirTruco(peloOponente = false, botId = 'op1') {
     playSound('truco'); triggerScreenShake();
@@ -319,6 +319,7 @@ function pedirTruco(peloOponente = false, botId = 'op1') {
     let grito = prop === 3 ? "TRUCO" : (prop === 6 ? "SEIS" : (prop === 9 ? "NOVE" : "DOZE"));
     
     if (peloOponente) {
+        travado = true; 
         botSpeak(botId, frasesTruco[Math.floor(Math.random()*frasesTruco.length)]);
         document.getElementById('truco-modal-title').innerText = `ELES PEDIRAM ${grito}!`;
         document.getElementById('btn-aumentar').style.display = prop >= 12 ? 'none' : 'block';
@@ -328,14 +329,58 @@ function pedirTruco(peloOponente = false, botId = 'op1') {
         setTimeout(() => {
             let forcaEles = maos.op1.reduce((a,c)=>a+c.valor,0) + maos.op2.reduce((a,c)=>a+c.valor,0);
             let coragem = Math.random() * 20;
-            if (forcaEles + coragem < 25) { botSpeak('op2', frasesFuga[Math.floor(Math.random()*frasesFuga.length)]); showToast("Eles fugiram!", "success"); pontosNos += valorRodada; setTimeout(reiniciarGlobal, 1500); }
-            else if (forcaEles + coragem > 50 && prop < 12 && Math.random() < 0.4) { pedirTruco(true, 'op1'); }  
-            else { playSound('win'); botSpeak('op1', "Manda a boa!"); showToast("Eles ACEITARAM!", "warning"); valorRodada = prop; atualizarUI("Aceito. Continue."); travado = false; }
+            if (forcaEles + coragem < 25) { 
+                botSpeak('op2', frasesFuga[Math.floor(Math.random()*frasesFuga.length)]); 
+                showToast("Eles fugiram!", "success"); 
+                pontosNos += valorRodada; 
+                setTimeout(reiniciarGlobal, 1500); 
+            }
+            else if (forcaEles + coragem > 50 && prop < 12 && Math.random() < 0.4) { 
+                valorRodada = prop; // O Bot aceita e pede por cima
+                pedirTruco(true, 'op1'); 
+            }  
+            else { 
+                playSound('win'); 
+                botSpeak('op1', "Manda a boa!"); 
+                showToast("Eles ACEITARAM!", "warning"); 
+                valorRodada = prop; 
+                atualizarUI("Aceito. Continue."); 
+                travado = false; 
+                
+                // CORREÇÃO AQUI: Acorda o Bot para ele jogar a carta se for o turno dele
+                let p = ordemJogadores[idxTurnoAtual];
+                if (p !== 'jogador' && !cartasMesa[p]) {
+                    setTimeout(() => turnoBot(p), 600);
+                }
+            }
         }, 1500);
     }
 }
 
 document.getElementById('btn-truco').onclick = () => { if (!travado) pedirTruco(false); };
-document.getElementById('btn-aceitar').onclick = () => { valorRodada = valorRodada === 1 ? 3 : valorRodada + 3; document.getElementById('truco-modal').style.display = 'none'; atualizarUI("Você aceitou. Manda!"); travado = false; if(ordemJogadores[idxTurnoAtual] !== 'jogador' && !cartasMesa[ordemJogadores[idxTurnoAtual]]) turnoBot(ordemJogadores[idxTurnoAtual]); };
-document.getElementById('btn-fugir').onclick = () => { document.getElementById('truco-modal').style.display = 'none'; showToast("Você fugiu.", "error"); pontosEles += valorRodada; setTimeout(reiniciarGlobal, 1500); };
-document.getElementById('btn-aumentar').onclick = () => { valorRodada = valorRodada === 1 ? 3 : valorRodada + 3; document.getElementById('truco-modal').style.display = 'none'; pedirTruco(false); };
+
+document.getElementById('btn-aceitar').onclick = () => { 
+    valorRodada = valorRodada === 1 ? 3 : valorRodada + 3; 
+    document.getElementById('truco-modal').style.display = 'none'; 
+    atualizarUI("Você aceitou. Manda!"); 
+    travado = false; 
+    
+    // CORREÇÃO AQUI TAMBÉM: Se for a vez do bot jogar, acorda ele
+    let p = ordemJogadores[idxTurnoAtual];
+    if (p !== 'jogador' && !cartasMesa[p]) {
+        setTimeout(() => turnoBot(p), 600);
+    }
+};
+
+document.getElementById('btn-fugir').onclick = () => { 
+    document.getElementById('truco-modal').style.display = 'none'; 
+    showToast("Você fugiu.", "error"); 
+    pontosEles += valorRodada; 
+    setTimeout(reiniciarGlobal, 1500); 
+};
+
+document.getElementById('btn-aumentar').onclick = () => { 
+    valorRodada = valorRodada === 1 ? 3 : valorRodada + 3; 
+    document.getElementById('truco-modal').style.display = 'none'; 
+    pedirTruco(false); 
+};
