@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Truco Paulista - Duplas (2v2) Premium</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="toast-container"></div>
+
+    <div id="start-screen" class="modal-overlay" style="display: flex;">
+        <div style="text-align: center;">
+            <h1 style="color: #ffeb3b; font-size: 3rem; margin-bottom: 10px; text-shadow: 0 4px 10px rgba(0,0,0,0.8);">TRUCO 2v2</h1>
+            <p style="margin-bottom: 30px; font-size: 1.2rem; color: #eee;">Sinais, Blefes e Gritaria.</p>
+            <button id="btn-start-game" class="btn-action">CORTAR O BARALHO</button>
+        </div>
+    </div>
+
+    <div id="game-table">
+        <div id="flash-effect"></div>
+
+        <div id="scoreboard">
+            <div class="score-team">
+                <span>NÓS</span>
+                <span id="score-geral-nos" class="score-points">0</span>
+            </div>
+            <div class="score-team">
+                <span style="font-size: 0.8rem; color:#bbb;">VALENDO</span>
+                <span id="valor-rodada-display">1</span>
+            </div>
+            <div class="score-team">
+                <span>ELES</span>
+                <span id="score-geral-eles" class="score-points">0</span>
+            </div>
+        </div>
+
+        <div style="position: relative; width: 100%; display: flex; justify-content: center;">
+            <div id="bubble-aliado" class="bot-bubble bubble-top hidden">Tô cego!</div>
+            <div id="aliado-area" class="player-area top-area"></div>
+        </div>
+
+        <div class="side-opponent left-opponent">
+            <div id="bubble-op1" class="bot-bubble bubble-left hidden">Ladrão!</div>
+            <div id="op1-area" class="player-area-side"></div>
+        </div>
+        
+        <div class="side-opponent right-opponent">
+            <div id="bubble-op2" class="bot-bubble bubble-right hidden">Corre!</div>
+            <div id="op2-area" class="player-area-side"></div>
+        </div>
+
+        <div id="center-table">
+            <div id="vira-container">
+                <div class="card card-back deck-card"></div>
+                <div id="vira-card"></div>
+            </div>
+            
+            <div id="played-cards">
+                <div class="slot-container top-slot">
+                    <span>Parceiro</span>
+                    <div id="slot-aliado" class="card-placeholder"></div>
+                </div>
+                <div class="slot-container left-slot">
+                    <span>Op 1</span>
+                    <div id="slot-op1" class="card-placeholder"></div>
+                </div>
+                <div class="slot-container right-slot">
+                    <span>Op 2</span>
+                    <div id="slot-op2" class="card-placeholder"></div>
+                </div>
+                <div class="slot-container bottom-slot">
+                    <span>Você</span>
+                    <div id="slot-jogador" class="card-placeholder"></div>
+                </div>
+            </div>
+
+            <div id="status-message">Aguardando...</div>
+            <div id="info-quedas">Quedas: Nós <span id="quedas-nos">0</span> x <span id="quedas-eles">0</span> Eles</div>
+        </div>
+
+        <div id="player-area" class="player-area bottom-area"></div>
+
+        <div id="actions">
+            <button id="btn-sinal" class="btn-action">SINAL</button>
+            <button id="btn-esconder" class="btn-action" style="margin: 0 10px;">COBRIR OFF</button>
+            <button id="btn-truco" class="btn-action">TRUCO</button>
+        </div>
+    </div>
+
+    <div id="truco-modal" class="modal-overlay">
+        <div class="modal-glass">
+            <h2 id="truco-modal-title">Eles pediram Truco!</h2>
+            <button id="btn-aceitar" class="btn-modal btn-green">ACEITAR</button>
+            <button id="btn-aumentar" class="btn-modal btn-orange">AUMENTAR</button>
+            <button id="btn-fugir" class="btn-modal btn-red">FUGIR</button>
+        </div>
+    </div>
+
+    <div id="mao11-modal" class="modal-overlay">
+        <div class="modal-glass">
+            <h2 style="color: #ffeb3b; text-align: center; font-size: 2rem; margin-top: 0;">MÃO DE 11</h2>
+            <p style="text-align: center; margin-bottom: 20px; font-size: 1.1rem;">Sua dupla está com 11 pontos. Olhe suas cartas. Aceita jogar valendo 3?</p>
+            <button id="btn-jogar-11" class="btn-modal btn-green">JOGAR (VALE 3)</button>
+            <button id="btn-correr-11" class="btn-modal btn-red">CORRER (DÁ 1 PONTO)</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
