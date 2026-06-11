@@ -1,0 +1,6 @@
+{
+  "appId": "com.truco.app",
+  "appName": "Meu Jogo de Truco",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
