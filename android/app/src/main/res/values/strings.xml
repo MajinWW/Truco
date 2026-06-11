@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Meu Jogo de Truco</string>
+    <string name="title_activity_main">Meu Jogo de Truco</string>
+    <string name="package_name">com.truco.app</string>
+    <string name="custom_url_scheme">com.truco.app</string>
+</resources>
